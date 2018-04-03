@@ -108,8 +108,8 @@ class dynatraceappmon::role::collector (
         'jvm_xms'              => $jvm_xms,
         'jvm_xmx'              => $jvm_xmx,
         'jvm_perm_size'        => $jvm_perm_size,
-        'jvm_max_perm_size'    => $jvm_max_perm_size,
-        'user'                 => $dynatrace_owner
+        'jvm_max_perm_size'    => $jvm_max_perm_size
+        #'user'                 => $dynatrace_owner
       },
       notify               => Service["Start and enable the ${role_name}'s service: '${service}'"]
     }

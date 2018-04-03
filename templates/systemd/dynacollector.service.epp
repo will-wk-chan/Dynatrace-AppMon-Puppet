@@ -1,0 +1,16 @@
+[Unit]
+Description=Dynatrace Collector service
+After=network.target
+After=dtserver.service
+
+[Service]
+Type=forking
+ExecStart=/etc/init.d/<%= $dynatraceappmon::role::collector::service %> start
+ExecStop=/etc/init.d/<%= $dynatraceappmon::role::collector::service %> stop
+Restart=on-failure
+User=<%= $dynatraceappmon::role::collector::dynatrace_owner %>
+Group=<%= $dynatraceappmon::role::collector::dynatrace_group %>
+LimitNOFILE=4096
+
+[Install]
+WantedBy=multi-user.target

@@ -25,9 +25,28 @@ define dynatraceappmon::resource::configure_init_script(
     }
   }
 
+  case $facts['osfamily'] {
+    'RedHat' : {
+        if $facts['os']['release']['major'] >= "7" {
+          info ("Redhat Major version: ${facts['os']['release']['major']}")
+          # Fix for adding a service in linux servers that uses systemd 
+          # instead of the old chkconfig (Red Hat 7, latest Centos and ubuntu, etc).
+          # https://answers.dynatrace.com/questions/170158/installation-tip-how-to-add-services-for-systemd-b.html?childToView=182667#answer-182667
+          $configure_systemd = true
+          # set DT_RUNASUSER= for init.d/dynaTraceCollector script
+          $dynatrace_runasuser = ''
+        }
+      }
+    default : {
+      $configure_systemd = false
+      $dynatrace_runasuser = $dynatrace_owner
+      }
+  }
+
   $params = delete_undef_values(merge($init_scripts_params, {
     'linux_service_start_runlevels' => $linux_service_start_runlevels,
-    'linux_service_stop_runlevels'  => $linux_service_stop_runlevels
+    'linux_service_stop_runlevels'  => $linux_service_stop_runlevels,
+    'user'                          => $dynatrace_runasuser
   }))
 
   $link_ensure = $ensure ? {
@@ -53,5 +72,25 @@ define dynatraceappmon::resource::configure_init_script(
     path                    => "/etc/init.d/${name}",
     target                  => "${installer_prefix_dir}/dynatrace/init.d/${name}",
     require                 => File["Configure and copy the ${role_name}'s '${name}' init script"]
+  }
+
+  if $configure_systemd {
+    info ("Configure for systemd")
+    $service_name = $name ? {
+      'dynaTraceCollector' => 'dynacollector',
+      # TODO add more service name mappings..
+      default   => 'dynacollector',
+    }
+
+    # create systemd service file
+    file { "${name}-systemd-service" :
+      path    => "/etc/systemd/system/${service_name}.service",
+      ensure  => present,
+      content => epp("dynatraceappmon/systemd/${service_name}.service.epp"),
+    }~>
+    exec { "${name}-systemd-reload" :
+      command     => '/bin/systemctl daemon-reload',
+      refreshonly => true,
+    }
   }
 }
