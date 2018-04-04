@@ -23,6 +23,7 @@ class dynatraceappmon (
   $collector_jvm_xmx              = $dynatraceappmon::params::collector_jvm_xmx,
   $collector_jvm_perm_size        = $dynatraceappmon::params::collector_jvm_perm_size,
   $collector_jvm_max_perm_size    = $dynatraceappmon::params::collector_jvm_max_perm_size,
+  $collector_conf_path            = $dynatraceappmon::params::collector_conf_path,
 
   $dynatrace_owner                = $dynatraceappmon::params::dynatrace_owner,
   $dynatrace_group                = $dynatraceappmon::params::dynatrace_group,

@@ -26,6 +26,7 @@
 #  $collector_jvm_xmx              => The Dynatrace Collector's JVM setting: -Xmx.
 #  $collector_jvm_perm_size        => The Dynatrace Collector's JVM setting: -XX:PermSize.
 #  $collector_jvm_max_perm_size    => The Dynatrace Collector's JVM setting: -XX:MaxPermSize.
+#  $collector_conf_path            => The Dynatrace Collector's configuration file path for: collector.config.xml
 #  
 #  $java_agent_env_var_name       => The name of the environment variable to be used for Dynatrace Agent injection.
 #  $java_agent_env_var_file_name  => The name of the file to be modified.
@@ -107,6 +108,7 @@ class dynatraceappmon::params {
       $collector_jvm_xmx              = undef
       $collector_jvm_perm_size        = undef
       $collector_jvm_max_perm_size    = undef
+      $collector_conf_path            = "${$collector_installer_prefix_dir}/dynatrace/collector/conf/collector.config.xml"
 
       $java_agent_env_var_name       = 'JAVA_OPTS'
       $java_agent_env_var_file_name  = undef

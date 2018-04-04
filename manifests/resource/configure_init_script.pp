@@ -77,9 +77,12 @@ define dynatraceappmon::resource::configure_init_script(
   if $configure_systemd {
     info ("Configure for systemd")
     $service_name = $name ? {
-      'dynaTraceCollector' => 'dynacollector',
+      $dynatraceappmon::dynaTraceCollector => 'dynacollector',
       # TODO add more service name mappings..
-      default   => 'dynacollector',
+      default   => undef,
+    }
+    if $service_name == undef {
+        fail ( "Unable to determine service name." )
     }
 
     # create systemd service file
