@@ -72,7 +72,10 @@ Puppet::Type.type(:dynatrace_installation).provide(:ruby) do
 #      end
     else
       puts "Symlink=#{symlink} not found."
-      installer_install_dir = @installer.get_install_dir("#{resource[:installer_cache_dir]}/#{resource[:installer_file_name]}")
+      installer_install_dir = @installer.get_install_dir( \
+                                  "#{resource[:installer_cache_dir]}/#{resource[:installer_file_name]}" \
+                                , "#{resource[:java_home_bin]}" \
+                              )
       @installer.destroy if @installer.exists?
   
       target = "#{resource[:installer_prefix_dir]}/#{installer_install_dir}"
@@ -103,7 +106,10 @@ Puppet::Type.type(:dynatrace_installation).provide(:ruby) do
       #for installer_path_part=agent there have to be extension because when there is already 'agent' folder then reqires_installation is false
       installer_path_to_check = alter_path
     else
-      installer_install_dir = @installer.get_install_dir("#{resource[:installer_cache_dir]}/#{resource[:installer_file_name]}")
+      installer_install_dir = @installer.get_install_dir( \
+                                  "#{resource[:installer_cache_dir]}/#{resource[:installer_file_name]}" \
+                                , "#{resource[:java_home_bin]}" \
+                              )
       installer_path_to_check = "#{resource[:installer_prefix_dir]}/#{installer_install_dir}/#{resource[:installer_path_part]}"
     end
   

@@ -7,7 +7,8 @@ class dynatraceappmon::role::agents_package (
   $installer_file_name  = $dynatraceappmon::agents_package_installer_file_name,
   $installer_file_url   = $dynatraceappmon::agents_package_installer_file_url,
   $dynatrace_owner      = $dynatraceappmon::dynatrace_owner,
-  $dynatrace_group      = $dynatraceappmon::dynatrace_group
+  $dynatrace_group      = $dynatraceappmon::dynatrace_group,
+  $java_home_bin        = '',
 ) inherits dynatraceappmon {
 
   validate_re($ensure, ['^present$', '^absent$'])
@@ -75,6 +76,7 @@ class dynatraceappmon::role::agents_package (
     installer_path_detailed => '',
     installer_owner         => $dynatrace_owner,
     installer_group         => $dynatrace_group,
-    installer_cache_dir     => $installer_cache_dir
+    installer_cache_dir     => $installer_cache_dir,
+    java_home_bin           => $java_home_bin,
   }
 }

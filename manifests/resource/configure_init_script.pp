@@ -76,24 +76,18 @@ define dynatraceappmon::resource::configure_init_script(
 
   if $configure_systemd {
     info ("Configure for systemd")
-    $service_name = $name ? {
-      $dynatraceappmon::dynaTraceCollector => 'dynacollector',
-      # TODO add more service name mappings..
-      default   => undef,
-    }
-    if $service_name == undef {
-        fail ( "Unable to determine service name." )
-    }
-
+ 
     # create systemd service file
     file { "${name}-systemd-service" :
-      path    => "/etc/systemd/system/${service_name}.service",
+      path    => "/etc/systemd/system/${name}.service",
       ensure  => present,
-      content => epp("dynatraceappmon/systemd/${service_name}.service.epp"),
+      content => epp("dynatraceappmon/systemd/${name}.service.epp"),
+      require => File["Make the '${name}' init script available in /etc/init.d"]
     }~>
     exec { "${name}-systemd-reload" :
       command     => '/bin/systemctl daemon-reload',
       refreshonly => true,
+      notify  =>  Service["Start and enable the ${role_name}'s service: '${name}'"],
     }
   }
 }

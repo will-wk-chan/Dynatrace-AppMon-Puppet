@@ -18,6 +18,7 @@ class dynatraceappmon::role::collector (
   $dynatrace_owner      = $dynatraceappmon::dynatrace_owner,
   $dynatrace_group      = $dynatraceappmon::dynatrace_group,
   $conf_path            = $dynatraceappmon::collector_conf_path,
+  $java_home_bin        = '',
 ) inherits dynatraceappmon {
 
   validate_re($ensure, ['^present$', '^absent$'])
@@ -93,7 +94,8 @@ class dynatraceappmon::role::collector (
     installer_path_detailed => '',
     installer_owner         => $dynatrace_owner,
     installer_group         => $dynatrace_group,
-    installer_cache_dir     => $installer_cache_dir
+    installer_cache_dir     => $installer_cache_dir,
+    java_home_bin           => $java_home_bin,
   }
 
   if $::kernel == 'Linux' {
@@ -114,7 +116,8 @@ class dynatraceappmon::role::collector (
         'jvm_max_perm_size'    => $jvm_max_perm_size
         #'user'                 => $dynatrace_owner
       },
-      notify               => Service["Start and enable the ${role_name}'s service: '${service}'"]
+      # service started after configuration or systemd configured.
+      #notify               => Service["Start and enable the ${role_name}'s service: '${service}'"]
     }
   }
 
