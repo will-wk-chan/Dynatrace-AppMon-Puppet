@@ -62,5 +62,9 @@ Puppet::Type.newtype(:dynatrace_installation) do
     defaultto '/tmp'
   end
 
+  newparam(:java_home_bin) do
+    defaultto ''
+  end
+
 end
 

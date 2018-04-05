@@ -2,6 +2,8 @@
 class dynatraceappmon::role::collector (
   $ensure               = 'present',
   $role_name            = 'Dynatrace Collector',
+  $group_name           = '',
+  $auth_string          = '',
   $installer_bitsize    = $dynatraceappmon::collector_installer_bitsize,
   $installer_prefix_dir = $dynatraceappmon::collector_installer_prefix_dir,
   $installer_file_name  = $dynatraceappmon::collector_installer_file_name,
@@ -14,7 +16,9 @@ class dynatraceappmon::role::collector (
   $jvm_perm_size        = $dynatraceappmon::collector_jvm_perm_size,
   $jvm_max_perm_size    = $dynatraceappmon::collector_jvm_max_perm_size,
   $dynatrace_owner      = $dynatraceappmon::dynatrace_owner,
-  $dynatrace_group      = $dynatraceappmon::dynatrace_group
+  $dynatrace_group      = $dynatraceappmon::dynatrace_group,
+  $conf_path            = $dynatraceappmon::collector_conf_path,
+  $java_home_bin        = '',
 ) inherits dynatraceappmon {
 
   validate_re($ensure, ['^present$', '^absent$'])
@@ -90,7 +94,8 @@ class dynatraceappmon::role::collector (
     installer_path_detailed => '',
     installer_owner         => $dynatrace_owner,
     installer_group         => $dynatrace_group,
-    installer_cache_dir     => $installer_cache_dir
+    installer_cache_dir     => $installer_cache_dir,
+    java_home_bin           => $java_home_bin,
   }
 
   if $::kernel == 'Linux' {
@@ -108,11 +113,24 @@ class dynatraceappmon::role::collector (
         'jvm_xms'              => $jvm_xms,
         'jvm_xmx'              => $jvm_xmx,
         'jvm_perm_size'        => $jvm_perm_size,
-        'jvm_max_perm_size'    => $jvm_max_perm_size,
-        'user'                 => $dynatrace_owner
+        'jvm_max_perm_size'    => $jvm_max_perm_size
+        #'user'                 => $dynatrace_owner
       },
-      notify               => Service["Start and enable the ${role_name}'s service: '${service}'"]
+      # service started after configuration or systemd configured.
+      #notify               => Service["Start and enable the ${role_name}'s service: '${service}'"]
     }
+  }
+
+  augeas { "configure collector.config.xml":
+    incl    => $conf_path,
+    lens    => "Xml.lns",
+    context => "/files${conf_path}",
+    changes => [
+      "set dynatrace/collectorconfig/#attribute/authstring '${auth_string}'",
+      "set dynatrace/collectorconfig/#attribute/groupname '${group_name}'",
+    ],
+    require => Dynatrace_installation["Install the ${role_name}"],
+    notify  =>  Service["Start and enable the ${role_name}'s service: '${service}'"],
   }
 
   service { "Start and enable the ${role_name}'s service: '${service}'":

@@ -25,9 +25,28 @@ define dynatraceappmon::resource::configure_init_script(
     }
   }
 
+  case $facts['osfamily'] {
+    'RedHat' : {
+        if $facts['os']['release']['major'] >= "7" {
+          info ("Redhat Major version: ${facts['os']['release']['major']}")
+          # Fix for adding a service in linux servers that uses systemd 
+          # instead of the old chkconfig (Red Hat 7, latest Centos and ubuntu, etc).
+          # https://answers.dynatrace.com/questions/170158/installation-tip-how-to-add-services-for-systemd-b.html?childToView=182667#answer-182667
+          $configure_systemd = true
+          # set DT_RUNASUSER= for init.d/dynaTraceCollector script
+          $dynatrace_runasuser = ''
+        }
+      }
+    default : {
+      $configure_systemd = false
+      $dynatrace_runasuser = $dynatrace_owner
+      }
+  }
+
   $params = delete_undef_values(merge($init_scripts_params, {
     'linux_service_start_runlevels' => $linux_service_start_runlevels,
-    'linux_service_stop_runlevels'  => $linux_service_stop_runlevels
+    'linux_service_stop_runlevels'  => $linux_service_stop_runlevels,
+    'user'                          => $dynatrace_runasuser
   }))
 
   $link_ensure = $ensure ? {
@@ -53,5 +72,22 @@ define dynatraceappmon::resource::configure_init_script(
     path                    => "/etc/init.d/${name}",
     target                  => "${installer_prefix_dir}/dynatrace/init.d/${name}",
     require                 => File["Configure and copy the ${role_name}'s '${name}' init script"]
+  }
+
+  if $configure_systemd {
+    info ("Configure for systemd")
+ 
+    # create systemd service file
+    file { "${name}-systemd-service" :
+      path    => "/etc/systemd/system/${name}.service",
+      ensure  => present,
+      content => epp("dynatraceappmon/systemd/${name}.service.epp"),
+      require => File["Make the '${name}' init script available in /etc/init.d"]
+    }~>
+    exec { "${name}-systemd-reload" :
+      command     => '/bin/systemctl daemon-reload',
+      refreshonly => true,
+      notify  =>  Service["Start and enable the ${role_name}'s service: '${name}'"],
+    }
   }
 }
