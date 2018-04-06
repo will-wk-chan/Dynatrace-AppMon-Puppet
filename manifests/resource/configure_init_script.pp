@@ -27,7 +27,9 @@ define dynatraceappmon::resource::configure_init_script(
 
   case $facts['osfamily'] {
     'RedHat' : {
-        if $facts['os']['release']['major'] >= "7" {
+        if $facts['os']['release']['major'] >= "7" 
+           and ($name == $dynatraceappmon::dynaTraceServer 
+                or $name == $dynatraceappmon::dynaTraceCollector ) {
           info ("Redhat Major version: ${facts['os']['release']['major']}")
           # Fix for adding a service in linux servers that uses systemd 
           # instead of the old chkconfig (Red Hat 7, latest Centos and ubuntu, etc).

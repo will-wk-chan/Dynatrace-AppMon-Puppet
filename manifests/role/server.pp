@@ -10,7 +10,8 @@ class dynatraceappmon::role::server (
   $license_file_url        = $dynatraceappmon::server_license_file_url,
   $collector_port          = $dynatraceappmon::server_embedded_collector_port,
   $dynatrace_owner         = $dynatraceappmon::dynatrace_owner,
-  $dynatrace_group         = $dynatraceappmon::dynatrace_group
+  $dynatrace_group         = $dynatraceappmon::dynatrace_group,
+  $java_home_bin           = '',
 ) inherits dynatraceappmon {
 
   validate_re($ensure, ['^present$', '^absent$'])
@@ -83,6 +84,7 @@ class dynatraceappmon::role::server (
     installer_owner         => $dynatrace_owner,
     installer_group         => $dynatrace_group,
     installer_cache_dir     => $installer_cache_dir,
+    java_home_bin           => $java_home_bin,
     require                 => File["Configure and copy the ${role_name}'s install script"]
   }
 
@@ -96,7 +98,7 @@ class dynatraceappmon::role::server (
       init_scripts_params  => {
         'installer_prefix_dir' => $installer_prefix_dir,
         'collector_port'       => $collector_port,
-        'user'                 => $dynatrace_owner
+        #'user'                 => $dynatrace_owner
       },
       require              => Dynatrace_installation["Install the ${role_name}"],
       notify               => Service["Start and enable the ${role_name}'s service: '${service}'"]
