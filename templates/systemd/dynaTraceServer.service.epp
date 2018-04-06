@@ -1,0 +1,15 @@
+[Unit]
+Description=Dynatrace Server service
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/etc/init.d/<%= $dynatraceappmon::role::server::service %> start
+ExecStop=/etc/init.d/<%= $dynatraceappmon::role::server::service %> stop
+Restart=on-failure
+User=<%= $dynatraceappmon::role::server::dynatrace_owner %>
+Group=<%= $dynatraceappmon::role::server::dynatrace_group %>
+LimitNOFILE=4096
+
+[Install]
+WantedBy=multi-user.target
