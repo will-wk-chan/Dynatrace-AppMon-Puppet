@@ -7,8 +7,8 @@
 
 # Force the following filetypes to have unix eols, so Windows does not break them
 *.sh eol=lf
-templates/init.d/*.erb
-templates/systemd/*.epp
+templates/init.d/*.erb eol=lf
+templates/systemd/*.epp eol=lf
 
 #
 ## These files are binary and should be left untouched
