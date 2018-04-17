@@ -28,7 +28,7 @@ define dynatraceappmon::resource::configure_init_script(
   case $facts['osfamily'] {
     'RedHat' : {
         if $facts['os']['release']['major'] >= '7'
-           and ($name == $dynatraceappmon::dynatrace_server
+              and ($name == $dynatraceappmon::dynatrace_server
                 or $name == $dynatraceappmon::dynatrace_collector ) {
           info ("Redhat Major version: ${facts['os']['release']['major']}")
           # Fix for adding a service in linux servers that uses systemd 

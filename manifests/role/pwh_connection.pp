@@ -13,7 +13,14 @@ class dynatraceappmon::role::pwh_connection (
 
   validate_re($ensure, ['^present$', '^absent$'])
   validate_string($collector_port)
-  validate_string($pwh_connection_hostname, $pwh_connection_port, $pwh_connection_dbms, $pwh_connection_database, $pwh_connection_username, $pwh_connection_password)
+  validate_string(
+    $pwh_connection_hostname,
+    $pwh_connection_port,
+    $pwh_connection_dbms,
+    $pwh_connection_database,
+    $pwh_connection_username,
+    $pwh_connection_password
+  )
 
   case $::kernel {
     'Linux': {

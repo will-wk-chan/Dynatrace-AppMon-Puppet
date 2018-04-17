@@ -19,11 +19,11 @@ class dynatraceappmon::role::server_update (
     'Linux': {
       $installer_script_name = 'install-server.sh'
 
-      $service                 = $dynatraceappmon::dynatrace_server
-      $collectorService        = $dynatraceappmon::dynatrace_collector
-      $dynaTraceAnalysis       = $dynatraceappmon::dynaTraceAnalysis
-      $dynaTraceWebServerAgent = $dynatraceappmon::dynatrace_webserver_agent
-      $dynaTraceHostagent      = $dynatraceappmon::dynatrace_host_agent
+      $service                   = $dynatraceappmon::dynatrace_server
+      $collector_service         = $dynatraceappmon::dynatrace_collector
+      $dynatrace_analysis        = $dynatraceappmon::dynatrace_analysis
+      $dynatrace_webserver_agent = $dynatraceappmon::dynatrace_webserver_agent
+      $dynatrace_host_agent      = $dynatraceappmon::dynatrace_host_agent
 
       $installer_cache_dir = "${dynatraceappmon::installer_cache_dir}/dynatrace"
       $installer_cache_dir_tree = dirtree($installer_cache_dir)
@@ -33,7 +33,7 @@ class dynatraceappmon::role::server_update (
       $services_to_start_array = [
         $dynatraceappmon::dynatrace_server,
         $dynatraceappmon::dynatrace_collector,
-        $dynatraceappmon::dynaTraceAnalysis,
+        $dynatraceappmon::dynatrace_analysis,
         $dynatraceappmon::dynatrace_webserver_agent,
         $dynatraceappmon::dynatrace_host_agent,
 #        'dynaTraceBackendServer',

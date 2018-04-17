@@ -55,13 +55,16 @@ class dynatraceappmon::role::php_one_agent (
     source       => $installer_file_url,
     extract      => true,
     extract_path => $installer_prefix_dir,
-    creates      => "${installer_prefix_dir}/dynatrace-oneagent-${agent_version}/agent/bin/linux-x86-${installer_bitsize}/liboneagentloader.so"
+    creates      => "${installer_prefix_dir}/dynatrace-oneagent-${agent_version}/agent/bin/"\
+                    "linux-x86-${installer_bitsize}/liboneagentloader.so"
   }
 
-  file_line { "Inject extension with '${installer_prefix_dir}/dynatrace-oneagent-${agent_version}/agent/bin/linux-x86-${installer_bitsize}/liboneagentloader.so' path into ${ini_file}":
+  file_line { "Inject extension with '${installer_prefix_dir}/dynatrace-oneagent-${agent_version}/agent/bin/"\
+              "linux-x86-${installer_bitsize}/liboneagentloader.so' path into ${ini_file}":
     ensure => $ensure,
     path   => $ini_file,
-    line   => "extension = ${installer_prefix_dir}/dynatrace-oneagent-${agent_version}/agent/bin/linux-x86-${installer_bitsize}/liboneagentloader.so",
+    line   => "extension = ${installer_prefix_dir}/dynatrace-oneagent-${agent_version}/agent/bin/"\
+              "linux-x86-${installer_bitsize}/liboneagentloader.so",
     match  => '^extension\s?=\s?.*liboneagentloader.so$',
     before => Exec["Start the service: ${service_name}"]
   }

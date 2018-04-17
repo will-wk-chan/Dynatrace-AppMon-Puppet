@@ -24,7 +24,7 @@ class dynatraceappmon::role::start_all_processes (
       $services_to_start_array = [
         $dynatraceappmon::dynatrace_server,
         $dynatraceappmon::dynatrace_collector,
-        $dynatraceappmon::dynaTraceAnalysis,
+        $dynatraceappmon::dynatrace_analysis,
         $dynatraceappmon::dynatrace_webserver_agent,
         $dynatraceappmon::dynatrace_host_agent,
 #        'dynaTraceBackendServer',
@@ -49,7 +49,9 @@ class dynatraceappmon::role::start_all_processes (
 
 #    puts "Start the service: '${x}'"
 
-    exec {"Start the service: '${x}'":    #hack to ensure restart service (stop service then start it) [there is no possibility in puppet to use the same name of service in different stauses because of error 'Cannot alias Service']
+    #hack to ensure restart service (stop service then start it) 
+    #[there is no possibility in puppet to use the same name of service in different stauses because of error 'Cannot alias Service']
+    exec {"Start the service: '${x}'":
       command => "service ${x} start",
       path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
       onlyif  => ["test -L /etc/init.d/${x}"],

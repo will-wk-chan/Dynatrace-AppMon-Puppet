@@ -23,7 +23,7 @@ class dynatraceappmon::role::memory_analysis_server (
   case $::kernel {
     'Linux': {
       $installer_script_name = 'install-memory-analysis-server.sh'
-      $service = $dynatraceappmon::dynaTraceAnalysis
+      $service = $dynatraceappmon::dynatrace_analysis
       $init_scripts = [$service]
     }
     default: {}

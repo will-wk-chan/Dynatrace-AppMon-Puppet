@@ -109,7 +109,12 @@ class dynatraceappmon::role::server (
     ensure => $service_ensure,
     name   => $service,
     enable => true,
-    notify => [ Wait_until_port_is_open['6699'], Wait_until_port_is_open['2021'], Wait_until_port_is_open['8021'], Wait_until_port_is_open['9911'] ]
+    notify => [
+      Wait_until_port_is_open['6699'],
+      Wait_until_port_is_open['2021'],
+      Wait_until_port_is_open['8021'],
+      Wait_until_port_is_open['9911']
+    ]
   }
 
   wait_until_port_is_open { '6699':
