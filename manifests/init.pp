@@ -77,13 +77,13 @@ class dynatraceappmon (
   $update_user               = $dynatraceappmon::params::update_user,
   $update_passwd             = $dynatraceappmon::params::update_passwd,
 
-  $dynaTraceCollector      = $dynatraceappmon::params::dynaTraceCollector,
-  $dynaTraceHostagent      = $dynatraceappmon::params::dynaTraceHostagent,
-  $dynaTraceAnalysis       = $dynatraceappmon::params::dynaTraceAnalysis,
-  $dynaTraceServer         = $dynatraceappmon::params::dynaTraceServer,
-  $dynaTraceWebServerAgent = $dynatraceappmon::params::dynaTraceWebServerAgent,
-  $dynaTraceFrontendServer = $dynatraceappmon::params::dynaTraceFrontendServer,
-  $dynaTraceBackendServer  = $dynatraceappmon::params::dynaTraceBackendServer,
+  $dynatrace_collector       = $dynatraceappmon::params::dynatrace_collector,
+  $dynatrace_host_agent      = $dynatraceappmon::params::dynatrace_host_agent,
+  $dynatrace_analysis        = $dynatraceappmon::params::dynatrace_analysis,
+  $dynatrace_server          = $dynatraceappmon::params::dynatrace_server,
+  $dynatrace_webserver_agent = $dynatraceappmon::params::dynatrace_webserver_agent,
+  $dynatrace_frontend_server = $dynatraceappmon::params::dynatrace_frontend_server,
+  $dynatrace_backend_server  = $dynatraceappmon::params::dynatrace_backend_server,
 
   $services_to_manage_array = $dynatraceappmon::params::services_to_manage_array,
 

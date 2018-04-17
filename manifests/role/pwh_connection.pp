@@ -17,7 +17,7 @@ class dynatraceappmon::role::pwh_connection (
 
   case $::kernel {
     'Linux': {
-      $service = $dynatraceappmon::dynaTraceServer
+      $service = $dynatraceappmon::dynatrace_server
     }
     default: {}
   }

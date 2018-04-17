@@ -21,8 +21,8 @@ class dynatraceappmon::role::server (
   case $::kernel {
     'Linux': {
       $installer_script_name = 'install-server.sh'
-      $service = $dynatraceappmon::dynaTraceServer
-      $init_scripts = [$service, $dynatraceappmon::dynaTraceFrontendServer, $dynatraceappmon::dynaTraceBackendServer]
+      $service = $dynatraceappmon::dynatrace_server
+      $init_scripts = [$service, $dynatraceappmon::dynatrace_frontend_server, $dynatraceappmon::dynatrace_backend_server]
       $dynatrace_server_installation_info_file = '/tmp/dynatrace_server_installation.info'
     }
     default: {}
