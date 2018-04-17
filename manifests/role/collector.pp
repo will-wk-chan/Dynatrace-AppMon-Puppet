@@ -121,9 +121,9 @@ class dynatraceappmon::role::collector (
     }
   }
 
-  augeas { "configure collector.config.xml":
+  augeas { 'configure collector.config.xml':
     incl    => $conf_path,
-    lens    => "Xml.lns",
+    lens    => 'Xml.lns',
     context => "/files${conf_path}",
     changes => [
       "set dynatrace/collectorconfig/#attribute/authstring '${auth_string}'",

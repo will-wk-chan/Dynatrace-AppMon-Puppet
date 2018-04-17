@@ -27,8 +27,8 @@ define dynatraceappmon::resource::configure_init_script(
 
   case $facts['osfamily'] {
     'RedHat' : {
-        if $facts['os']['release']['major'] >= "7" 
-           and ($name == $dynatraceappmon::dynaTraceServer 
+        if $facts['os']['release']['major'] >= '7'
+           and ($name == $dynatraceappmon::dynaTraceServer
                 or $name == $dynatraceappmon::dynaTraceCollector ) {
           info ("Redhat Major version: ${facts['os']['release']['major']}")
           # Fix for adding a service in linux servers that uses systemd 
@@ -77,19 +77,19 @@ define dynatraceappmon::resource::configure_init_script(
   }
 
   if $configure_systemd {
-    info ("Configure for systemd")
- 
+    info ('Configure for systemd')
+
     # create systemd service file
     file { "${name}-systemd-service" :
-      path    => "/etc/systemd/system/${name}.service",
       ensure  => present,
+      path    => "/etc/systemd/system/${name}.service",
       content => epp("dynatraceappmon/systemd/${name}.service.epp"),
       require => File["Make the '${name}' init script available in /etc/init.d"]
-    }~>
-    exec { "${name}-systemd-reload" :
+    }
+    ~> exec { "${name}-systemd-reload" :
       command     => '/bin/systemctl daemon-reload',
       refreshonly => true,
-      notify  =>  Service["Start and enable the ${role_name}'s service: '${name}'"],
+      notify      =>  Service["Start and enable the ${role_name}'s service: '${name}'"],
     }
   }
 }
