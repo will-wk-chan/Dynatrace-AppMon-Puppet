@@ -41,7 +41,7 @@ define dynatraceappmon::resource::configure_init_script(
       }
     default : {
       $configure_systemd = false
-      $dynatrace_runasuser = $dynatrace_owner
+      $dynatrace_runasuser = $owner
       }
   }
 
